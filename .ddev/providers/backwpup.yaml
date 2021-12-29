@@ -1,0 +1,52 @@
+# Import a backwup .zip
+# (plugin: https://wordpress.org/plugins/backwpup/)
+
+# ! MAKE SURE YOU GOT LATEST DDEV VERSION, 
+# otherwise overriding files_import_command won't work !
+
+# This will pull a database and files from local harddrive
+
+# TODO: get filename of .zip from cli argument - how?
+environment_variables:
+  backupfile: 2021-12-29_19-00-08_EYYNYOER01.zip # TODO: file must be in docroot - not a good solution? but when stored in .ddev/downloads, it gets deleted before we can handle it?
+
+# TODO: check if backup .zip-file really exists
+# This unzips the backup zip and renames the database 
+# dump (<database_name>.sql) to db.sql
+db_pull_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    unzip "${backupfile}" -d /var/www/html/.ddev/.downloads/files
+    pushd /var/www/html/.ddev/.downloads/files >/dev/null
+    mv $(sed -n "s/define( *'DB_NAME', *'\([^']*\)'.*/\1/p" wp-config.php).sql /var/www/html/.ddev/.downloads/db.sql 
+    gzip -cvf /var/www/html/.ddev/.downloads/db.sql > /var/www/html/.ddev/.downloads/db.sql.gz
+  service: web
+
+db_import_command:
+  command: |
+    set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    # how to run ddev import-db in web container? copied this from localfile example (host)
+    gzip -dc /var/www/html/.ddev/.downloads/db.sql.gz | mysql db
+    # TODO: run wp cli replace here? 
+  service: web
+
+files_pull_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    echo "already unzipped files to .ddev/downloads/files, done."
+  service: web
+
+# We overwrite docroot
+# TODO: do not overwrite files which are not ignored by git? we did this in custom commands? https://github.com/mandrasch/ddev-wp-groundstation/blob/main/.ddev/commands/web/setup-symlinks
+# or use this?
+# TODO: use wp cli to replace database site url (old site url in wp_options table) as well as in manifest.json of backup => can we get it via wpcli get_options (wp option get siteurl)?
+files_import_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    echo "ok, rsyncing all files and folders which are not tracked by git... "
+    rsync -avz --include-from="/var/www/html/${DDEV_DOCROOT}/.gitignore" /var/www/html/.ddev/.downloads/files/ "/var/www/html/${DDEV_DOCROOT}/"
+  service: web
