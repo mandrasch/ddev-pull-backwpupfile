@@ -49,8 +49,9 @@ files_import_command:
     echo "ok, rsyncing all files and folders which are not tracked by git... "
     echo "DDEV DOCROOT: ${DDEV_DOCROOT}"
     # TODO: this only works with DDEV ssh? but not in pull script?!
-    rsync -av --include-from='/var/www/html/.gitignore' /var/www/html/.ddev/.downloads/files/ /var/www/html # TODO: use docroot, but without trailing slash?
-    #pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
+    # Use filter: ?
+    pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
+    rsync -av --include-from='.gitignore' /var/www/html/.ddev/.downloads/files/ .
     echo "Adjusting wp-config for DDEV (database credentials in wp-config.php) ..."
     wp config set DB_NAME "db" && wp config set DB_USER "db" && wp config set DB_PASSWORD "db" && wp config set DB_HOST "db"
     echo "Replacing the old URL in database with DDEV local url..."
