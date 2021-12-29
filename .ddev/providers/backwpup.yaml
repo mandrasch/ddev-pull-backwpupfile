@@ -25,11 +25,10 @@ db_pull_command:
 
 db_import_command:
   command: |
-    set -x   # You can enable bash debugging output by uncommenting
+    # set -x   # You can enable bash debugging output by uncommenting
     set -eu -o pipefail
     # how to run ddev import-db in web container? copied this from localfile example (host)
     gzip -dc /var/www/html/.ddev/.downloads/db.sql.gz | mysql db
-    # TODO: run wp cli replace here? 
   service: web
 
 files_pull_command:
@@ -48,5 +47,12 @@ files_import_command:
     # set -x   # You can enable bash debugging output by uncommenting
     set -eu -o pipefail
     echo "ok, rsyncing all files and folders which are not tracked by git... "
-    rsync -avz --include-from="/var/www/html/${DDEV_DOCROOT}/.gitignore" /var/www/html/.ddev/.downloads/files/ "/var/www/html/${DDEV_DOCROOT}/"
+    echo "DDEV DOCROOT: ${DDEV_DOCROOT}"
+    # TODO: this only works with DDEV ssh? but not in pull script?!
+    rsync -av --include-from='/var/www/html/.gitignore' /var/www/html/.ddev/.downloads/files/ /var/www/html # TODO: use docroot, but without trailing slash?
+    #pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
+    echo "Adjusting wp-config for DDEV (database credentials in wp-config.php) ..."
+    wp config set DB_NAME "db" && wp config set DB_USER "db" && wp config set DB_PASSWORD "db" && wp config set DB_HOST "db"
+    echo "Replacing the old URL in database with DDEV local url..."
+    wp search-replace $(wp option get siteurl) "${DDEV_PRIMARY_URL}"
   service: web
