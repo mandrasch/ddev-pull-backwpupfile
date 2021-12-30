@@ -58,9 +58,13 @@ files_import_command:
     set -eu -o pipefail
     pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
     echo "Rsyncing all files and folders which are not tracked by git to docroot ..."
-    rsync -av --include-from='.gitignore' --exclude='*' /var/www/html/.ddev/.downloads/files/ .
+    # add -v for debug purposes
+    rsync -azh --stats --include-from='.gitignore' --exclude='*' /var/www/html/.ddev/.downloads/files/ .
     echo "Adjusting wp-config for DDEV (database connection) ..."
     wp config set DB_NAME "db" && wp config set DB_USER "db" && wp config set DB_PASSWORD "db" && wp config set DB_HOST "db"
     echo "Replacing the old URL ($(wp option get siteurl)) in database with DDEV local url (${DDEV_PRIMARY_URL})..."
     wp search-replace $(wp option get siteurl) "${DDEV_PRIMARY_URL}"
+    # echo "Deleting config path for WP Super Cache (if installed) ..."
+    # wp config delete WPCACHEHOME
+    echo "All set, have fun! Run 'ddev launch' to open your site."
   service: web
