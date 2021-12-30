@@ -1,0 +1,66 @@
+# Import a backwup .zip-file
+
+# !! MAKE SURE YOU GOT DDEV VERSION > 1.18.2 !!
+# (Otherwise overriding files_import_command won't work)
+
+# This will import a backwpup .zip-file into the DDEV project
+# Plugin: https://wordpress.org/plugins/backwpup/
+
+# The script will automatically replace (migrate) the URLs in database.
+# The import only overrides files which are not tracked by git
+# using the .gitignore file.
+
+# TODO: get filename of .zip from cli argument - how? would be easier?
+environment_variables:
+  backupfile: backup.zip # needs to be in docroot (your project folder)
+
+# This unzips the sql file from backup and generates a .sql.gz file,
+# which DDEV imports automatically (via standard db_import_command)
+db_pull_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
+    mkdir -p /var/www/html/.ddev/.downloads/db
+    echo "Unzipping wp-config.php to figure out the database name ..."
+    unzip -j "${backupfile}" "wp-config.php" -d /var/www/html/.ddev/.downloads/db
+    # TODO: save DB_NAME as var temporarily in bash?
+    pushd /var/www/html/.ddev/.downloads/db >/dev/null 
+    echo "Unzipping the <DB_NAME>.sql file from backwpup zip file ..."
+    unzip -j "/var/www/html/${DDEV_DOCROOT}${backupfile}" "$(sed -n "s/define( *'DB_NAME', *'\([^']*\)'.*/\1/p" wp-config.php).sql" -d .
+    echo "Renaming the <DB_NAME>.sql file to db.sql ..."
+    mv $(sed -n "s/define( *'DB_NAME', *'\([^']*\)'.*/\1/p" wp-config.php).sql db.sql 
+    echo "Gzipping the .sql file to let DDEV handle the db import ..."
+    gzip -cvf /var/www/html/.ddev/.downloads/db/db.sql > /var/www/html/.ddev/.downloads/db.sql.gz
+  service: web
+
+files_pull_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    pushd /var/www/html/${DDEV_DOCROOT} >/dev/null
+    echo "Unzipping the backwpup .zip file to .ddev/.downloads/files ..."
+    unzip -q "${backupfile}" -d /var/www/html/.ddev/.downloads/files
+    # echo "Content of .ddev/.downloads/files after sync:"
+    # ls -l /var/www/html/.ddev/.downloads/files
+  service: web
+
+# Final steps:
+#   a) Overwrite files in docroot, but without overwriting git-tracked files
+#      using .gitignore file
+#   b) Replace live site url (determined from backup) with DDEV_PRIMARY_URL
+#      (<your-project>.ddev.site) with help of WP-CLI
+#   TODO: re-generate permalinks? 
+#   TODO: update upload_path?
+files_import_command:
+  command: |
+    # set -x   # You can enable bash debugging output by uncommenting
+    set -eu -o pipefail
+    pushd "/var/www/html/${DDEV_DOCROOT}" >/dev/null
+    echo "Rsyncing all files and folders which are not tracked by git to docroot ..."
+    rsync -av --include-from='.gitignore' --exclude='*' /var/www/html/.ddev/.downloads/files/ .
+    echo "Adjusting wp-config for DDEV (database connection) ..."
+    wp config set DB_NAME "db" && wp config set DB_USER "db" && wp config set DB_PASSWORD "db" && wp config set DB_HOST "db"
+    echo "Replacing the old URL ($(wp option get siteurl)) in database with DDEV local url (${DDEV_PRIMARY_URL})..."
+    wp search-replace $(wp option get siteurl) "${DDEV_PRIMARY_URL}"
+  service: web

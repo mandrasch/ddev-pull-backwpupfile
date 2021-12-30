@@ -5,7 +5,7 @@
 !*/
 
 # ddev providers
-!.ddev/providers/backwpup.yaml
+!.ddev/providers/backwpupfile.yaml
 
 # wp-config for ddev (overrides)
 # !/wp-config-ddev.php
