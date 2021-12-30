@@ -20,8 +20,11 @@ This providers script will import a backup file created with [BackWPup – WordP
 1. Create a zip-backup of your site with [BackWPup – WordPress Backup Plugin](https://wordpress.org/plugins/backwpup/)
 1. Download the backup file to this project folder
 1. Rename the .zip file to `backup.zip`
+1. `ddev start`
 1. `ddev pull backwpupfile`
 1. `ddev launch`
+
+Screencast: coming soon
 
 ## Technical background
 
@@ -30,8 +33,7 @@ See [DDEV providers](https://ddev.readthedocs.io/en/stable/users/providers/provi
 ## TODOs
 
 - [ ] check if git-tracked child theme is really not overriden by import, upload & install child theme on live site
-
-Screencast: coming soon
+- [ ] refresh permalinks structure if we switch from apache to nginx and vice versa? 
 
 ## See as well:
 

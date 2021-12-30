@@ -1,12 +1,14 @@
 # ignore all 
-/*
+*
 
-# But descend into directories
-#!*/
+# But descend into directories (needed?)
+# !*/
 
 # ddev providers
-!.ddev/config.yaml
-!.ddev/providers/backwpupfile.yaml
+!/.ddev/providers/backwpupfile.yaml
+
+# ddev config (uncomment if you want to share it in your project)
+# !/.ddev/config.yaml
 
 # wp-config for ddev (overrides)
 # !/wp-config-ddev.php
@@ -23,5 +25,6 @@
 # except gitignore
 !.gitignore
 
-# except README
+# except README & License
 !/README.md
+!/LICENSE
