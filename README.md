@@ -12,7 +12,8 @@ This providers script will import a backup file created with [BackWPup – WordP
 
 ## Use it
 
-1. Clone this repository to your local harddrive
+1. Fork this repository via "Use this template"-button
+1. Clone to your local harddrive
 1. Setup your project with `ddev config --project-type=wordpress`
 1. `ddev start`
 
