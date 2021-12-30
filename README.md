@@ -8,7 +8,7 @@ This providers script will import a backup file created with [BackWPup – WordP
 
 - This [DDEV providers](https://ddev.readthedocs.io/en/stable/users/providers/provider-introduction/)  script imports database and files from a backwpup .zip-backup
 - The script will automatically replace (migrate) the URLs in database
-- The files import only overrides files which are not tracked by git (using the .gitignore file, see example of wp-content/themes/twenty-twenty-childtheme). This allows you to manage child themes or custom plugins in your git project (and push them to your live site via [git-updater](https://git-updater.com/) or [wppusher](https://wppusher.com/)).
+- The files import only overrides files which are not tracked by git (using the .gitignore file, see example of wp-content/themes/twentytwentyone-child). This allows you to manage child themes or custom plugins in your git project (and push them to your live site via [git-updater](https://git-updater.com/) or [wppusher](https://wppusher.com/)).
 
 ## Use it
 
