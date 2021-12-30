@@ -35,6 +35,8 @@ See [DDEV providers](https://ddev.readthedocs.io/en/stable/users/providers/provi
 
 - [ ] check if git-tracked child theme is really not overriden by import, upload & install child theme on live site
 - [ ] refresh permalinks structure if we switch from apache to nginx and vice versa? 
+- [ ] Test with subdirectory as docroot
+- [ ] Test with multiple zip files (large backups)
 
 ## See as well:
 
