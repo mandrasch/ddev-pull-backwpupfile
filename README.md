@@ -13,12 +13,15 @@ This providers script will import a backup file created with [BackWPup – WordP
 ## Use it
 
 1. Clone this repository to your local harddrive
+1. Setup your project with `ddev config --project-type=wordpress`
+1. `ddev start`
+
+### Import a backup 
 1. Create a zip-backup of your site with [BackWPup – WordPress Backup Plugin](https://wordpress.org/plugins/backwpup/)
-2. Download the backup file to this project folder
-2. Rename the .zip file to `backup.zip`
-3. `ddev start`
-4. `ddev pull backwpupfile`
-5. `ddev launch`
+1. Download the backup file to this project folder
+1. Rename the .zip file to `backup.zip`
+1. `ddev pull backwpupfile`
+1. `ddev launch`
 
 ## Technical background
 

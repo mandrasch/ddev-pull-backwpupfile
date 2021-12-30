@@ -1,10 +1,11 @@
 # ignore all 
-*
+/*
 
 # But descend into directories
-!*/
+#!*/
 
 # ddev providers
+!.ddev/config.yaml
 !.ddev/providers/backwpupfile.yaml
 
 # wp-config for ddev (overrides)
@@ -12,11 +13,12 @@
 
 # but not child theme, unignore pattern 
 # (first unignore, than ignore all but specific folders again)
-!/wp-content/
-/wp-content/**
-!/wp-content/themes/
-/wp-content/themes/**
-!/wp-content/themes/twentytwenty-child-theme/
+# TODO: is there an easier way?
+!/wp-content
+/wp-content/*
+!/wp-content/themes
+/wp-content/themes/*
+!/wp-content/themes/twentytwentyone-child
 
 # except gitignore
 !.gitignore
