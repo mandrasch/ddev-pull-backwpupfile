@@ -26,7 +26,7 @@ This providers script will import a backup file created with [BackWPup – WordP
 1. `ddev pull backwpupfile`
 1. `ddev launch`
 
-Screencast: coming soon
+Screencast: coming soon, see blog post with screenshots: https://matthias-andrasch.eu/blog/2021/import-a-wordpress-site-into-ddev-ddev-pull-backwpupfile/
 
 ## Technical background
 
