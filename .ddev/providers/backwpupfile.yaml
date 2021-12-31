@@ -1,6 +1,6 @@
 # Import a backwup .zip-file
 
-# !! MAKE SURE YOU GOT DDEV VERSION > 1.18.2 !!
+# !! MAKE SURE YOU GOT DDEV VERSION >= 1.18.2 !!
 # (Otherwise overriding files_import_command won't work)
 
 # This will import a backwpup .zip-file into the DDEV project
