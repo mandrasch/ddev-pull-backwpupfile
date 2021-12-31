@@ -16,6 +16,9 @@ environment_variables:
 
 # This unzips the sql file from backup and generates a .sql.gz file,
 # which DDEV imports automatically (via standard db_import_command)
+# (This script also determines name of database via bash command,
+# thanks to https://stackoverflow.com/a/63494305/809939)
+# The database url replace-search will be done later in files_import_command
 db_pull_command:
   command: |
     # set -x   # You can enable bash debugging output by uncommenting

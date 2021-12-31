@@ -32,6 +32,17 @@ Screencast: coming soon
 
 See [DDEV providers](https://ddev.readthedocs.io/en/stable/users/providers/provider-introduction/) for more information about providers integration. The magic is happening in [`.ddev/providers/backwpupfile.yaml`](https://github.com/mandrasch/ddev-pull-backwpupfile/blob/main/.ddev/providers/backwpupfile.yaml). 
 
+## Reset
+
+Remove all changes and reset everything, only git tracked files will be left.
+
+```
+ddev delete -O
+git clean -fdx
+```
+
+(You need to run `ddev config --project-type=wordpress` again if you haven't added .ddev/config.yaml to git.)
+
 ## TODOs
 
 - [ ] check if git-tracked child theme is really not overriden by import, upload & install child theme on live site
