@@ -4,6 +4,10 @@ This providers script will import a backup file created with [BackWPup – WordP
 
 *This is an unofficial community script. Thanks you, Inpsyde GmbH, for providing BackWPup as Open Source!*
 
+**Screencast:** 
+
+coming soon, see blog post with screenshots: https://matthias-andrasch.eu/blog/2021/import-a-wordpress-site-into-ddev-ddev-pull-backwpupfile/
+
 **Features:**
 
 - This [DDEV providers](https://github.com/mandrasch/ddev-pull-backwpupfile/blob/main/.ddev/providers/backwpupfile.yaml)  script imports database and files from a backwpup .zip-backup
