@@ -1,3 +1,23 @@
+# Outdated repository
+
+**This project was moved to:**
+
+https://github.com/mandrasch/ddev-pull-wp-scripts
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 # ddev-pull-backwpupfile
 
 This providers script will import a backup file created with [BackWPup – WordPress Backup Plugin](https://wordpress.org/plugins/backwpup/) (Open Source) into a DDEV project.
